@@ -2,66 +2,107 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IBFAV</title>
-  <link rel="stylesheet" href="index.css">
+  <title>Igreja Batista FAV</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCX3UouJc1fD5au0pjdlJnExFx9_puw2Rc",
+      authDomain: "ibfav-nilopolis.firebaseapp.com",
+      projectId: "ibfav-nilopolis",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function carregarAgenda() {
+      const agendaEl = document.getElementById("agenda");
+      const querySnapshot = await getDocs(collection(db, "agenda"));
+      querySnapshot.forEach((doc) => {
+        const e = doc.data();
+        const item = document.createElement("li");
+        item.textContent = `${e.data} ${e.hora} - ${e.descricao}`;
+        agendaEl.appendChild(item);
+      });
+    }
+
+    async function carregarGaleria() {
+      const galeriaEl = document.getElementById("galeria");
+      const querySnapshot = await getDocs(collection(db, "galeria"));
+      querySnapshot.forEach((doc) => {
+        const img = document.createElement("img");
+        img.src = doc.data().url;
+        img.width = 150;
+        galeriaEl.appendChild(img);
+      });
+    }
+
+        // Limpar campos após envio com FormSubmit
+    document.getElementById("form-contato").addEventListener("submit", function () {
+        setTimeout(() => {
+        this.reset();
+        }, 1000); // aguarda 1 segundo antes de limpar (tempo de redirecionamento)
+    });
+
+    carregarAgenda();
+    carregarGaleria();
+  </script>
 </head>
 
 <body>
-    <div class="overlay">
-
-        <p>Seja muito bem-vindo! Uma igreja que ama a Deus e ama você.</p>
-
-        <div class="section dias-de-culto">
+  <header class="overlay">
+    <div class="section dias-de-culto">
         <h2>📅 Dias de Culto</h2>
         <ul>
-            <li>Quarta – 19:30h as 21h | Culto de Ensino</li>
+            <li>Quarta – 19:30h as 21:30h | Culto de Ensino</li>
             <li>Domingo – 9h as 11h | Escola Biblica</li>
             <li>e 18h as 20h | Culto da Família</li>
         </ul>
         </div>
+    <p>Endereço: Tv. Natividade, 07 - Novo Horizonte, Nilópolis - RJ</p>
 
-        <div class="section redes-sociais">
+    <div class="section redes-sociais">
         <h2>📲 Redes Sociais</h2>
         <a href="https://www.facebook.com/ibfav">Facebook</a>
         <a href="https://instagram.com/ibfavnilopolis" target="_blank">Instagram</a>
-        <a href="https://wa.me/5599999999999" target="_blank">WhatsApp</a>
-        </div>
+        <a href="https://wa.me/5521992415936" target="_blank">
+        <img src="whatsapp-qr.png" alt="QR Code WhatsApp" width="120">
+        </a>
+      </div>
+    
+  </header>
 
-        <div class="section formulario">
-        <h2>📨 Entre em Contato</h2>
-        <form>
-            <input type="text" placeholder="Seu nome" required>
-            <input type="email" placeholder="Seu e-mail" required>
-            <textarea rows="4" placeholder="Sua mensagem" required></textarea>
-            <button type="submit">Enviar Mensagem</button>
-        </form>
-        </div>
+  <section>
+    <h2>Agenda</h2>
+    <ul id="agenda"></ul>
+  </section>
 
-        <div class="section video">
-        <h2>🎥 Assista ao nosso vídeo</h2>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/-F3ECgxCKjw?si=qbMkB7k01xpNNVtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
+  <section>
+    <h2>🖼 Galeria de Fotos</h2>
+    <div id="galeria"></div>
+  </section>
 
-        <div class="section mapa">
-        <h2>📍 Localização</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d743.5131638491745!2d-43.40590097158047!3d-22.80040886239102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x99641d37647723%3A0x7ebd2e2966a3afe4!2sTv.%20Natividade%2C%2007%20-%20Novo%20Horizonte%2C%20Nil%C3%B3polis%20-%20RJ%2C%2026535-350!5e1!3m2!1spt-BR!2sbr!4v1753599485305!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-
-        <div class="section galeria">
-        <h2>🖼 Galeria de Fotos</h2>
-        <div class="galeria">
-            <img src="" alt="Culto 1">
-            <img src="" alt="Culto 2">
-            <img src="" alt="Culto 3">
-            <img src="" alt="Culto Jovem">
-        </div>
-        </div>
-
-        <footer>
-        <p>&copy; 2025 IBFAV • Todos os direitos reservados</p>
-        </footer>
-
+  <section>
+    <div class="section formulario">
+      <h2>📨 Entre em Contato</h2>
+      <form action="https://formsubmit.co/k4du.teste@gmail.com" method="POST">
+        <input type="text" name="nome" placeholder="Seu nome" required><br>
+        <input type="email" name="email" placeholder="Seu e-mail" required><br>
+        <textarea name="mensagem" placeholder="Sua mensagem" required></textarea><br>
+        
+        <!-- Proteção opcional -->
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://obrigado.netlify.app/"> <!-- página de agradecimento -->
+        
+        <button type="submit">Enviar Mensagem</button>
+      </form>
     </div>
+  </section>
+
+  <footer>
+    <p>Pastor Carlos Henrique |    © 2025 Igreja Batista IBFAV</p>
+  </footer>
 </body>
 </html>
